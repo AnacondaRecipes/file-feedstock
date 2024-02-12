@@ -2,7 +2,7 @@
 {% set version = "5.39" %}
 
 package:
-  name: {{ name|lower }}
+  name: file-split
   version: {{ version }}
 
 source:
@@ -51,7 +51,9 @@ outputs:
         - {{ compiler('c') }}
         - make
       host:
-        - zlib  # [unix]
+        # Not needed since no build will happen, but it stop conda-build from complaining
+        # that libmagic doesn't exist during the DSO analysis.
+        - {{ pin_subpackage("libmagic", exact=True) }}
       run:
         - {{ pin_subpackage("libmagic", exact=True) }}
     files:
@@ -75,11 +77,13 @@ outputs:
         requires a bit of I/O.
 
 about:
-  home: http://darwinsys.com/file
+  home: https://darwinsys.com/file/
   summary: Fine Free File Command
   license: BSD-2-Clause
+  license_family: BSD
   license_file: COPYING
   dev_url: https://github.com/file/file
+  doc_url: https://darwinsys.com/file/
 
 extra:
   recipe-maintainers:

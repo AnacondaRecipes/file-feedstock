@@ -1,5 +1,5 @@
 {% set name = "file" %}
-{% set version = "5.39" %}
+{% set version = "5.46" %}
 
 package:
   name: file-split
@@ -7,19 +7,29 @@ package:
 
 source:
   url: ftp://ftp.astron.com/pub/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: f05d286a76d9556243d0cb05814929c2ecf3a5ba07963f8f70bfaaa70517fad1
+  # The CMake project used for Windows assumes paths are ./file/src/
+  folder: file  # [win]
+  sha256: c9cc77c7c560c543135edc555af609d5619dbef011997e988ce40a3d75d86088
+  patches:
+    - patches/0001-Set-version-in-header.patch       # [win]
+    - patches/0002-Add-Windows-header-imports.patch  # [win]
 
 build:
-  number: 1
-  skip: True  # [win]
+  number: 0
 
 requirements:
   build:
-    - gnuconfig  # [unix]
     - {{ compiler('c') }}
-    - make
+    - gnuconfig  # [unix]
+    - make       # [unix]
+    - m2-patch   # [win]
+    - cmake      # [win]
+    - ninja      # [win]
   host:
-    - zlib  # [unix]
+    - pcre2 10   # [win]
+    - xz {{ xz }}
+    - zlib {{ zlib }}
+    - zstd {{ zstd }}
 
 outputs:
   - name: libmagic
@@ -28,19 +38,32 @@ outputs:
         - {{ pin_subpackage('libmagic', max_pin='x') }}
     requirements:
       build:
-        - gnuconfig  # [unix]
         - {{ compiler('c') }}
-        - make
+        - gnuconfig  # [unix]
+        - make       # [unix]
+        - m2-patch   # [win]
+        - cmake      # [win]
+        - ninja      # [win]
       host:
-        - zlib  # [unix]
+        - pcre2 10   # [win]
+        - xz {{ xz }}
+        - zlib {{ zlib }}
+        - zstd {{ zstd }}
     files:
-      - include/magic.h
-      - lib/libmagic.*
-      - share/misc/magic.mgc
-      - lib/pkgconfig/libmagic.pc
+      - include/magic.h            # [unix]
+      - lib/libmagic.*             # [unix]
+      - share/misc/magic.mgc       # [unix]
+      - lib/pkgconfig/libmagic.pc  # [unix]
+      - Library/include/magic.h            # [win]
+      - Library/bin/libmagic.*             # [win]
+      - Library/lib/libmagic.*             # [win]
+      - Library/share/misc/magic.mgc       # [win]
+      - Library/lib/pkgconfig/libmagic.pc  # [win]
     test:
       commands:
-        - "test -r $CONDA_PREFIX/lib/libmagic${SHLIB_EXT}"
+        - "test -r $CONDA_PREFIX/lib/libmagic${SHLIB_EXT}"  # [unix]
+        - "if not exist %LIBRARY_BIN%/libmagic.dll exit 1"  # [win]
+        - "if not exist %LIBRARY_LIB%/libmagic.lib exit 2"  # [win]
     about:
       summary: Implementation of the file(1) command
 
@@ -49,7 +72,7 @@ outputs:
       build:
         - gnuconfig  # [unix]
         - {{ compiler('c') }}
-        - make
+        - make  # [unix]
       host:
         # Not needed since no build will happen, but it stop conda-build from complaining
         # that libmagic doesn't exist during the DSO analysis.
@@ -57,10 +80,14 @@ outputs:
       run:
         - {{ pin_subpackage("libmagic", exact=True) }}
     files:
-      - bin/file
-      - share/man/man*/file*
-      - share/man/man*/magic*
-      - share/man/man*/libmagic*
+      - bin/file                  # [unix]
+      - share/man/man*/file*      # [unix]
+      - share/man/man*/magic*     # [unix]
+      - share/man/man*/libmagic*  # [unix]
+      - Library/bin/file.exe              # [win]
+      - Library/share/man/man*/file*      # [win]
+      - Library/share/man/man*/magic*     # [win]
+      - Library/share/man/man*/libmagic*  # [win]
     test:
       commands:
         - file -v
@@ -79,13 +106,19 @@ outputs:
 about:
   home: https://darwinsys.com/file/
   summary: Fine Free File Command
-  license: BSD-2-Clause
+  description: |
+    The file command is "a file type guesser", that is, a command-line tool that tells you in words what kind of data
+    a file contains.
+  license: BSD-2-Clause-Darwin
   license_family: BSD
   license_file: COPYING
   dev_url: https://github.com/file/file
   doc_url: https://darwinsys.com/file/
 
 extra:
+  skip-lints:
+    - incorrect_license
+    - invalid_url
   recipe-maintainers:
     - chrisburr
     - mariusvniekerk

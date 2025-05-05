@@ -1,0 +1,25 @@
+From 01297d4ae7278b5b39174f055011c00d8d62346e Mon Sep 17 00:00:00 2001
+From: Brian Wing <bwing@anaconda.com>
+Date: Thu, 1 May 2025 12:24:06 -0400
+Subject: [PATCH] Set version in header
+
+---
+ src/magic.h.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/magic.h.in b/src/magic.h.in
+index 142d7e0d..5e22975e 100644
+--- a/src/magic.h.in
++++ b/src/magic.h.in
+@@ -117,7 +117,7 @@ b\31transp_compression\0\
+ #define	MAGIC_NO_CHECK_FORTRAN	0x000000 /* Don't check ascii/fortran */
+ #define	MAGIC_NO_CHECK_TROFF	0x000000 /* Don't check ascii/troff */
+ 
+-#define MAGIC_VERSION		X.YY	/* This implementation */
++#define MAGIC_VERSION		5.46	/* This implementation */
+ 
+ 
+ #ifdef __cplusplus
+-- 
+2.49.0
+

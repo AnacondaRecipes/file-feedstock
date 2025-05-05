@@ -1,0 +1,80 @@
+From a78fd37f8dbd85d6dda8bf58d8675325e7dcd582 Mon Sep 17 00:00:00 2001
+From: Brian Wing <bwing@anaconda.com>
+Date: Thu, 1 May 2025 12:22:34 -0400
+Subject: [PATCH] Add Windows header imports
+
+---
+ src/file.h    | 9 ++++++++-
+ src/magic.c   | 2 ++
+ src/readelf.c | 2 ++
+ tests/test.c  | 1 +
+ 4 files changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/src/file.h b/src/file.h
+index 99226327..06a7775a 100644
+--- a/src/file.h
++++ b/src/file.h
+@@ -33,6 +33,13 @@
+ #ifndef __file_h__
+ #define __file_h__
+ 
++#ifdef WIN32
++#include <unistd.h>
++#include <dirent.h>
++#undef S_IFLNK
++#undef S_IFSOCK
++#endif
++
+ #ifdef HAVE_CONFIG_H
+ #include <config.h>
+ #endif
+@@ -79,7 +86,7 @@
+ #include <stdio.h>	/* Include that here, to make sure __P gets defined */
+ #include <errno.h>
+ #include <fcntl.h>	/* For open and flags */
+-#include <regex.h>
++#include <pcre2posix.h>
+ #include <time.h>
+ #include <sys/types.h>
+ #ifndef WIN32
+diff --git a/src/magic.c b/src/magic.c
+index def46fa3..23baebf9 100644
+--- a/src/magic.c
++++ b/src/magic.c
+@@ -32,6 +32,8 @@
+ 
+ #include "file.h"
+ 
++#include <dirent.h>
++
+ #ifndef	lint
+ FILE_RCSID("@(#)$File: magic.c,v 1.123 2023/12/29 18:04:48 christos Exp $")
+ #endif	/* lint */
+diff --git a/src/readelf.c b/src/readelf.c
+index fe4cf541..9b4413bb 100644
+--- a/src/readelf.c
++++ b/src/readelf.c
+@@ -26,6 +26,8 @@
+  */
+ #include "file.h"
+ 
++#include <dirent.h>
++
+ #ifndef lint
+ FILE_RCSID("@(#)$File: readelf.c,v 1.196 2024/11/11 15:49:11 christos Exp $")
+ #endif
+diff --git a/tests/test.c b/tests/test.c
+index b3c2a85b..744798d9 100644
+--- a/tests/test.c
++++ b/tests/test.c
+@@ -25,6 +25,7 @@
+  * SUCH DAMAGE.
+  */
+ 
++#include <getopt.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <unistd.h>
+-- 
+2.49.0
+

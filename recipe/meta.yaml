@@ -15,7 +15,7 @@ source:
     - patches/0002-Add-Windows-header-imports.patch  # [win]
 
 build:
-  number: 0
+  number: 1
 
 requirements:
   build:
@@ -26,7 +26,7 @@ requirements:
     - cmake      # [win]
     - ninja      # [win]
   host:
-    - pcre2 10   # [win]
+    - pcre2 {{ pcre2 }}   # [win]
     - xz {{ xz }}
     - zlib {{ zlib }}
     - zstd {{ zstd }}
@@ -45,7 +45,7 @@ outputs:
         - cmake      # [win]
         - ninja      # [win]
       host:
-        - pcre2 10   # [win]
+        - pcre2 {{ pcre2 }}   # [win]
         - xz {{ xz }}
         - zlib {{ zlib }}
         - zstd {{ zstd }}

@@ -39,6 +39,7 @@ set(LIBMAGIC_SOURCE_FILES
   readelf.c
   softmagic.c
   is_csv.c
+  swap.c
 )
 
 configure_file(magic.h.in magic.h COPYONLY)

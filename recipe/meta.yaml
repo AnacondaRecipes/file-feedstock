@@ -117,9 +117,6 @@ about:
   doc_url: https://darwinsys.com/file/
 
 extra:
-  skip-lints:
-    - incorrect_license
-    - invalid_url
   recipe-maintainers:
     - chrisburr
     - mariusvniekerk

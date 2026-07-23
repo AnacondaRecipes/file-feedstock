@@ -16,7 +16,7 @@ index 142d7e0d..5e22975e 100644
  #define	MAGIC_NO_CHECK_TROFF	0x000000 /* Don't check ascii/troff */
  
 -#define MAGIC_VERSION		X.YY	/* This implementation */
-+#define MAGIC_VERSION		5.46	/* This implementation */
++#define MAGIC_VERSION		5.48	/* This implementation */
  
  
  #ifdef __cplusplus

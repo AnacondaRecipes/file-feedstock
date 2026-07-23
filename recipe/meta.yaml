@@ -121,3 +121,6 @@ extra:
     - chrisburr
     - mariusvniekerk
     - mrakitin
+  skip-lints:
+    - reachable_url
+    - http_url

@@ -17,4 +17,5 @@ EXPORTS
     magic_errno
     magic_setparam
     magic_getparam
+    magic_getmaxparam
     getline

@@ -1,8 +1,9 @@
 anaconda_config_version: 1
 upstream_sources:
-  - github:
-      identifier: file/file
-      use_max_tag: true
-      include_regex: ^FILE\d+_\d+$
-      from_pattern: ^FILE(\d+)_(\d+)$
-      to_pattern: \1.\2
+  - webpage:
+      url: https://astron.com/pub/file/
+      regex: \d+.\d+
+    packages:
+      - libmagic
+      - file
+

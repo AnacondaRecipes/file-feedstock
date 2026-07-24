@@ -1,5 +1,5 @@
 {% set name = "file" %}
-{% set version = "5.46" %}
+{% set version = "5.48" %}
 
 package:
   name: file-split
@@ -9,13 +9,13 @@ source:
   url: ftp://ftp.astron.com/pub/{{ name }}/{{ name }}-{{ version }}.tar.gz
   # The CMake project used for Windows assumes paths are ./file/src/
   folder: file  # [win]
-  sha256: c9cc77c7c560c543135edc555af609d5619dbef011997e988ce40a3d75d86088
+  sha256: ed14656883b23a364b4057c05595d93252da9bc473d30106519519d0da141283
   patches:
     - patches/0001-Set-version-in-header.patch       # [win]
     - patches/0002-Add-Windows-header-imports.patch  # [win]
 
 build:
-  number: 1
+  number: 0
 
 requirements:
   build:
@@ -38,6 +38,7 @@ outputs:
         - {{ pin_subpackage('libmagic', max_pin='x') }}
     requirements:
       build:
+        - {{ stdlib('c') }}
         - {{ compiler('c') }}
         - gnuconfig  # [unix]
         - make       # [unix]
@@ -70,6 +71,7 @@ outputs:
     requirements:
       build:
         - gnuconfig  # [unix]
+        - {{ stdlib('c') }}
         - {{ compiler('c') }}
         - make  # [unix]
       host:
@@ -115,10 +117,10 @@ about:
   doc_url: https://darwinsys.com/file/
 
 extra:
-  skip-lints:
-    - incorrect_license
-    - invalid_url
   recipe-maintainers:
     - chrisburr
     - mariusvniekerk
     - mrakitin
+  skip-lints:
+    - reachable_url
+    - http_url
